@@ -4,7 +4,7 @@ This small app consumes web hooks from Github. It can trigger the run of a scrip
 
 ## Installation
 
-```pip install https://github.com/FlorianRupp/django-webhook-consume.git```
+```pip install git+https://github.com/FlorianRupp/django-webhook-consume.git```
 
 ## Quick start
 -----------
