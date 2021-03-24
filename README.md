@@ -2,6 +2,10 @@
 
 This small app consumes web hooks from Github. It can trigger the run of a script, when a push to a specific branch of a repo was made.
 
+## Installation
+
+```pip install https://github.com/FlorianRupp/django-webhook-consume.git```
+
 ## Quick start
 -----------
 
