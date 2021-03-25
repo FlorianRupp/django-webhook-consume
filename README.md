@@ -35,4 +35,4 @@ The payload from github is hashed added a secret key, also named salt. This appl
 computes this hash and compares it with the one computed by github. Only if both hashes match,
 the execution is forwarded. For security reasons the value of this secret key should be configured
 through environment and _not_ hardcoded. Therefore we only configure the name of the environment 
-variable ```SEDRET_KEY_NAME```. 
+variable ```SECRET_KEY_NAME```. 
