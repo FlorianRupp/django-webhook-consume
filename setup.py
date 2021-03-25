@@ -1,3 +1,4 @@
 from setuptools import setup
 
-setup(packages=["django_webhook_consume"])
+setup(packages=["django_webhook_consume"],
+      install_requires=['django'])

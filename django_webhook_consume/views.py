@@ -1,10 +1,10 @@
 import json
 import os
 
+from django.conf import settings as s
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators import http, csrf
 
-from django.conf import settings as s
 from django_webhook_consume.helper import check_hash, check_branch
 
 
@@ -17,7 +17,13 @@ def consume_web_hook(request):
     If so the configured script is executed.
     """
     payload = request.body
-    if check_hash(os.environ[s.SECRET_KEY_NAME], payload, request.META[s.GITHUB_SECURE_HEADER]) is True:
+    try:
+        secret = os.environ[s.SECRET_KEY_NAME]
+    except KeyError:
+        print("key is not configured through env.")
+        return HttpResponse(status=400)
+
+    if check_hash(secret, payload, request.META[s.GITHUB_SECURE_HEADER]) is True:
         if check_branch(json.loads(payload), s.BRANCH):
             print("Run script here")
             os.system(s.SCRIPT)
