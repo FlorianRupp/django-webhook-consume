@@ -4,5 +4,5 @@ from django.urls import path
 
 
 urlpatterns = [
-    path("github/", views.consume_web_hook)
+    path("github/<str:hook_id>", views.consume_web_hook)
 ]

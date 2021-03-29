@@ -10,23 +10,28 @@ from django_webhook_consume.helper import check_hash, check_branch
 
 @http.require_POST
 @csrf.csrf_exempt
-def consume_web_hook(request):
+def consume_web_hook(request, hook_id):
     """
-    Trigger on configured web hook. If called the hash of a given secret and received payload ist built. This hash is
-    compared with received control hash. If hashes match it is checked if the hook matched the branch.
+    Trigger on configured web hook (hook_id). If called the hash of a given secret and received payload ist built. This
+    hash is compared with received control hash. If hashes match it is checked if the hook matched the branch.
     If so the configured script is executed.
     """
     payload = request.body
     try:
-        secret = os.environ[s.SECRET_KEY_NAME]
+        cfg = s.WEB_HOOK[hook_id]
+    except KeyError:
+        print("no config for this hook.")
+        return HttpResponse(status=400)
+    try:
+        secret = os.environ[cfg["secret_key_name"]]
     except KeyError:
         print("key is not configured through env.")
         return HttpResponse(status=400)
 
-    if check_hash(secret, payload, request.META[s.GITHUB_SECURE_HEADER]) is True:
-        if check_branch(json.loads(payload), s.BRANCH):
+    if check_hash(secret, payload, request.META[cfg["github_header_name"]]) is True:
+        if check_branch(json.loads(payload), cfg["branch"]):
             print("Run script here")
-            os.system(s.SCRIPT)
+            os.system(cfg["script"])
         else:
             print("Hashes matched, but event is not configured.")
         return HttpResponse()

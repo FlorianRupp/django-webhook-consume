@@ -11,7 +11,11 @@ def check_hash(secret, payload, extern_hash):
     :return: True if hashes matched, False otherwise.
     """
     local_hash = "sha256=" + hmac.new(secret.encode("utf8"), payload, sha256).hexdigest()
-    return hmac.compare_digest(local_hash, extern_hash)
+    result = hmac.compare_digest(local_hash, extern_hash)
+    if result is False:
+        print("SHA256 local", local_hash)
+        print("SHA256 extern", extern_hash)
+    return result
 
 
 def check_branch(payload, branch):
