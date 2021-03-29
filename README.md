@@ -41,6 +41,8 @@ WEB_HOOK = {
 * ```github_header_name```: Name of the Github secure header.
 * ```script```: Path to script with parameters to be executed when hook is triggered.
 
+5. Using this configuration, the URL to the web hook endpoint would be:
+```yourdomain.org/hook/web-hook-id```
 
 ## Security
 The payload from github is hashed added a secret key, also named salt. This application
