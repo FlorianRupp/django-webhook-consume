@@ -35,6 +35,7 @@ def consume_web_hook(request, hook_id):
         secret = os.environ[cfg["secret_key_name"]]
     except KeyError:
         logging.error("key is not configured through env.")
+        logging.error(os.environ)
         return HttpResponse(status=400)
 
     try:
