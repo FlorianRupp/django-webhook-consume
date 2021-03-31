@@ -28,7 +28,13 @@ def consume_web_hook(request, hook_id):
         print("key is not configured through env.")
         return HttpResponse(status=400)
 
-    if check_hash(secret, payload, request.META[cfg["github_header_name"]]) is True:
+    try:
+        github_header = request.META[cfg["github_header_name"]]
+    except KeyError:
+        print("Configured github header not in request.")
+        return HttpResponse(status=400)
+
+    if check_hash(secret, payload, github_header) is True:
         if check_branch(json.loads(payload), cfg["branch"]):
             print("Run script here")
             os.system(cfg["script"])
