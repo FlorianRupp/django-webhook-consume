@@ -51,6 +51,7 @@ def consume_web_hook(request, hook_id):
             # subprocess.Popen(cfg["script"])
             requests.post('http://127.0.0.1:8765', data={'command': cfg['script']})
             logger.info("Script execution sent.")
+            return HttpResponse()
         else:
             logging.error("Hashes matched, but event is not configured.")
             return HttpResponse(status=404)
