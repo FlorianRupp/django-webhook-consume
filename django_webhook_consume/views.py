@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import subprocess
 
 from django.conf import settings as s
 from django.http import HttpResponse, HttpResponseForbidden
@@ -35,7 +36,6 @@ def consume_web_hook(request, hook_id):
         secret = os.environ[cfg["secret_key_name"]]
     except KeyError:
         logging.error("key is not configured through env.")
-        logging.error(os.environ)
         return HttpResponse(status=400)
 
     try:
@@ -47,7 +47,7 @@ def consume_web_hook(request, hook_id):
     if check_hash(secret, payload, github_header) is True:
         if check_branch(json.loads(payload), cfg["branch"]):
             logger.info(f"Script {cfg['script']} executing...")
-            os.system(cfg["script"])
+            subprocess.Popen(cfg["script"])
             logger.info("Script executed.")
         else:
             logging.error("Hashes matched, but event is not configured.")
