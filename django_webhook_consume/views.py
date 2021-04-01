@@ -47,11 +47,15 @@ def consume_web_hook(request, hook_id):
     if check_hash(secret, payload, github_header) is True:
         if check_branch(json.loads(payload), cfg["branch"]):
             logger.info(f"Script {cfg['script']} executing...")
-            subprocess.Popen(cfg["script"], close_fds=False)
+            pid = os.fork()
+            if pid == 0:
+                return HttpResponse()
+            subprocess.Popen(cfg["script"])
             logger.info("Script executed.")
         else:
             logging.error("Hashes matched, but event is not configured.")
-        return HttpResponse()
+            return HttpResponse(status=404)
     else:
         logging.warning("Hashes did not match!")
         return HttpResponseForbidden()
+
