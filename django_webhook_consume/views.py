@@ -3,6 +3,7 @@ import logging
 import os
 import subprocess
 
+import requests
 from django.conf import settings as s
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators import http, csrf
@@ -47,15 +48,12 @@ def consume_web_hook(request, hook_id):
     if check_hash(secret, payload, github_header) is True:
         if check_branch(json.loads(payload), cfg["branch"]):
             logger.info(f"Script {cfg['script']} executing...")
-            pid = os.fork()
-            if pid == 0:
-                return HttpResponse()
-            subprocess.Popen(cfg["script"])
-            logger.info("Script executed.")
+            # subprocess.Popen(cfg["script"])
+            requests.post('http://127.0.0.1:8765', data={'command': cfg['script']})
+            logger.info("Script execution sent.")
         else:
             logging.error("Hashes matched, but event is not configured.")
             return HttpResponse(status=404)
     else:
         logging.warning("Hashes did not match!")
         return HttpResponseForbidden()
-
