@@ -46,10 +46,6 @@ WEB_HOOK = {
 
 6. Additional configuration paramters:
 * ```WEB_HOOK_URL```: Use this one to configure the web hook url base name, e.g. "hook".
-* ```EXECUTION_SERVER```: As we may trigger some scripts which restart the process of this application,
-scripts started in subprocesses by this application will be shutdown. Thus, this app triggers the execution of scripts
-on a small additional server in a several process structure. Configure here the url, e.g. ```http://localhost:8765```.
-The code for a script execution server can be found [here](https://github.com/FlorianRupp/script-handler).
 
 ## Security
 The payload from github is hashed added a secret key, also named salt. This application
